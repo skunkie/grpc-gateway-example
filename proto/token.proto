@@ -1,0 +1,27 @@
+syntax = "proto3";
+package pb;
+option go_package = "./pb";
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "validate/validate.proto";
+
+message CreateTokenReq {
+  string username = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description: "Username",
+      example: "\"username\""
+    },
+    (validate.rules).string = {min_bytes: 1, max_bytes: 256}
+  ];
+  string password = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description: "Password",
+      example: "\"password\""
+    },
+    (validate.rules).string = {min_bytes: 1}
+  ];
+}
+
+message Token {
+  string token_string = 1;
+}

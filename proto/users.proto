@@ -1,0 +1,62 @@
+syntax = "proto3";
+package pb;
+option go_package = "./pb";
+
+import "google/api/field_behavior.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "validate/validate.proto";
+
+message Id {
+  string id = 1 [(validate.rules).string = {uuid: true, len: 36}];
+}
+
+message Ids {
+  repeated string id = 1 [(validate.rules).repeated = {items: {string: {uuid: true, len: 36}}, ignore_empty: true, unique: true}];
+}
+
+message CreateUserReq {
+  string name = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description: "Name",
+      example: "\"username\""
+    },
+    (validate.rules).string = {min_bytes: 1, max_bytes: 256}
+  ];
+  string email = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description: "Email",
+      example: "\"username@example.com\""
+    },
+    (validate.rules).string.email = true
+  ];
+}
+
+message UpdateUserReq {
+  string id = 1 [(validate.rules).string = {uuid: true, len: 36}];
+  optional string name = 2 [
+    (google.api.field_behavior) = OPTIONAL,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description: "Name",
+      example: "\"username\""
+    },
+    (validate.rules).string = {min_bytes: 1, max_bytes: 256}
+  ];
+  optional string email = 3 [
+    (google.api.field_behavior) = OPTIONAL,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description: "Email",
+      example: "\"username@example.com\""
+    },
+    (validate.rules).string.email = true
+  ];
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message Users {
+  repeated User users = 1;
+}
